@@ -1,6 +1,6 @@
 package de.axelspringer.ideas.tools.dash.business.jenkins.executor;
 
-import de.axelspringer.ideas.tools.dash.business.check.CheckResult;
+import de.axelspringer.ideas.tools.dash.business.check.checkresult.CheckResult;
 import de.axelspringer.ideas.tools.dash.business.jenkins.JenkinsCheck;
 import de.axelspringer.ideas.tools.dash.business.jenkins.JenkinsClient;
 import de.axelspringer.ideas.tools.dash.business.jenkins.JenkinsServerConfiguration;
@@ -44,7 +44,7 @@ public class JenkinsPipelineExecutorTest {
         initMockForUrl(LAST_BUILD_URL, buildInfo("stage one", "stage two"));
         initMockForUrl(LAST_SUCCESSFUL_BUILD_URL, buildInfo("stage one", "stage two", "stage three"));
 
-        final List<CheckResult> checkResults = executor.executeCheck(new JenkinsJobInfo(lastSuccessfulBuild, lastBuild), mock(JenkinsCheck.class));
+        final List<CheckResult> checkResults = executor.executeCheck(new JenkinsJobInfo(lastSuccessfulBuild, lastBuild), mock(JenkinsCheck.class), mock(BuildInfo.class));
         assertEquals(3, checkResults.size());
         assertEquals("NOT EXECUTED", checkResults.get(2).getInfo());
     }
@@ -55,7 +55,7 @@ public class JenkinsPipelineExecutorTest {
         initMockForUrl(LAST_BUILD_URL, buildInfo("stage one", "stage newTwo"));
         initMockForUrl(LAST_SUCCESSFUL_BUILD_URL, buildInfo("stage one", "stage two", "stage three"));
 
-        final List<CheckResult> checkResults = executor.executeCheck(new JenkinsJobInfo(lastSuccessfulBuild, lastBuild), mock(JenkinsCheck.class));
+        final List<CheckResult> checkResults = executor.executeCheck(new JenkinsJobInfo(lastSuccessfulBuild, lastBuild), mock(JenkinsCheck.class), mock(BuildInfo.class));
         assertEquals(2, checkResults.size());
     }
 
@@ -64,7 +64,7 @@ public class JenkinsPipelineExecutorTest {
 
         initMockForUrl(LAST_BUILD_URL, buildInfo("stage one", "stage two"));
 
-        final List<CheckResult> checkResults = executor.executeCheck(new JenkinsJobInfo(null, lastBuild), mock(JenkinsCheck.class));
+        final List<CheckResult> checkResults = executor.executeCheck(new JenkinsJobInfo(null, lastBuild), mock(JenkinsCheck.class), mock(BuildInfo.class));
         assertEquals(2, checkResults.size());
     }
 

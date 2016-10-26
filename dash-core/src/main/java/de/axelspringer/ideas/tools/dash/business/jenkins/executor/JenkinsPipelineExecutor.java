@@ -1,14 +1,11 @@
 package de.axelspringer.ideas.tools.dash.business.jenkins.executor;
 
-import de.axelspringer.ideas.tools.dash.business.check.CheckResult;
+import de.axelspringer.ideas.tools.dash.business.check.checkresult.CheckResult;
 import de.axelspringer.ideas.tools.dash.business.customization.Group;
 import de.axelspringer.ideas.tools.dash.business.jenkins.JenkinsCheck;
 import de.axelspringer.ideas.tools.dash.business.jenkins.JenkinsClient;
 import de.axelspringer.ideas.tools.dash.business.jenkins.JenkinsServerConfiguration;
-import de.axelspringer.ideas.tools.dash.business.jenkins.domain.Build;
-import de.axelspringer.ideas.tools.dash.business.jenkins.domain.JenkinsJobInfo;
-import de.axelspringer.ideas.tools.dash.business.jenkins.domain.JenkinsPipelineBuildInfo;
-import de.axelspringer.ideas.tools.dash.business.jenkins.domain.PipelineStage;
+import de.axelspringer.ideas.tools.dash.business.jenkins.domain.*;
 import de.axelspringer.ideas.tools.dash.presentation.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +28,7 @@ public class JenkinsPipelineExecutor {
         this.jenkinsClient = jenkinsClient;
     }
 
-    public List<CheckResult> executeCheck(JenkinsJobInfo jobInfo, JenkinsCheck check) {
+    public List<CheckResult> executeCheck(JenkinsJobInfo jobInfo, JenkinsCheck check, BuildInfo buildInfo) {
 
         final JenkinsServerConfiguration serverConfig = check.getServerConfiguration();
 
@@ -78,7 +75,9 @@ public class JenkinsPipelineExecutor {
                                             .withOrder(checkIndex)
                                             .withLink(lastBuild.getUrl())
                                             .withTeams(check.getTeams())
-                                            .withIconSrc("http://www.kidsmathgamesonline.com/images/pictures/numbers120/number" + checkIndex + ".jpg");
+                                            .withIconSrc("http://www.kidsmathgamesonline.com/images/pictures/numbers120/number" + checkIndex + ".jpg")
+                                            .withCheckResultIdentifier(lastBuild.getUrl() + "_(stage" + checkIndex + ")")
+                                            .withDescription(buildInfo.getStageDescriptions().getOrDefault(stage.getName(), ""));
                                 }
                         )
                         .collect(Collectors.toList()));
@@ -123,10 +122,11 @@ public class JenkinsPipelineExecutor {
         switch (stage.getStatus()) {
             case SUCCESS:
                 return State.GREEN;
-            case ABORTED:
             case IN_PROGRESS:
-            case PAUSED_PENDING_INPUT:
                 return State.GREY;
+            case PAUSED_PENDING_INPUT:
+                return State.YELLOW;
+            case ABORTED:
             case FAILED:
             default:
                 return State.RED;

@@ -1,13 +1,13 @@
 package de.axelspringer.ideas.tools.dash.business.jenkins;
 
-import de.axelspringer.ideas.tools.dash.business.check.AbstractCheck;
+import de.axelspringer.ideas.tools.dash.business.check.Check;
 import de.axelspringer.ideas.tools.dash.business.customization.Group;
 import de.axelspringer.ideas.tools.dash.business.customization.Team;
 import de.axelspringer.ideas.tools.dash.business.jenkins.joblist.JenkinsJobNameMapper;
 
 import java.util.List;
 
-public class JenkinsCheck extends AbstractCheck {
+public class JenkinsCheck extends Check {
 
     private static final String ICON_SRC = "assets/jenkins-logo.png";
 
@@ -16,6 +16,8 @@ public class JenkinsCheck extends AbstractCheck {
     private JenkinsJobNameMapper jenkinsJobNameMapper;
 
     private final String jobUrl;
+
+    private boolean fetchBuildInfo = false;
 
     public JenkinsCheck(String name, String url, String userName, String apiToken, Group group, List<Team> teams, JenkinsJobNameMapper jenkinsJobNameMapper) {
         super(name, group, teams);
@@ -29,6 +31,12 @@ public class JenkinsCheck extends AbstractCheck {
         this.jobUrl = jobUrl;
         this.serverConfiguration = new JenkinsServerConfiguration(url, userName, apiToken);
         this.jenkinsJobNameMapper = jenkinsJobNameMapper;
+    }
+
+    public JenkinsCheck(String jobName, String url, JenkinsServerConfiguration serverConfig, Group group, List<Team> teams) {
+        super(jobName, group, teams);
+        this.serverConfiguration = serverConfig;
+        this.jobUrl = url;
     }
 
     public JenkinsCheck(String jobName, JenkinsServerConfiguration serverConfig, Group group, List<Team> teams) {
@@ -46,6 +54,11 @@ public class JenkinsCheck extends AbstractCheck {
         return this;
     }
 
+    public JenkinsCheck withFetchBuildInfo(boolean fetchBuildInfo) {
+        this.fetchBuildInfo = fetchBuildInfo;
+        return this;
+    }
+
     public JenkinsServerConfiguration getServerConfiguration() {
         return serverConfiguration;
     }
@@ -57,5 +70,9 @@ public class JenkinsCheck extends AbstractCheck {
     @Override
     public String getIconSrc() {
         return ICON_SRC;
+    }
+
+    public boolean isFetchBuildInfo() {
+        return fetchBuildInfo;
     }
 }

@@ -1,0 +1,40 @@
+<div class="panel-content-left">
+    <!-- link if specified, div if not -->
+    <a ng-show="check.link" href="{{ check.link }}" target="_blank">
+        <div class="check-name">{{ check.name }}</div>
+        <div ng-bind-html="check.info | limitTo : 25"></div>
+    </a>
+
+    <div ng-hide="check.link">
+        <div class="check-name">{{ check.name }}</div>
+        <div ng-bind-html="check.info | limitTo : 25"></div>
+    </div>
+</div>
+
+<div class="panel-content-right">
+    <img ng-if="check.iconSrc"
+         src="{{check.iconSrc}}"
+         width="20"
+         height="20"/>
+</div>
+
+<div class="check-metainfo">
+
+    <div ng-show="check.description" class="description">
+        <i>{{check.description}}</i>
+    </div>
+
+    <div ng-show="check.checkResultIdentifier">
+        <blockquote class="comment"
+                    ng-repeat="comment in comments | byCheckResultIdentifier:check.checkResultIdentifier">
+            {{ comment.comment }}
+        </blockquote>
+        <div class="comments-form form-inline">
+            <input type="text" ng-model="newcomment" placeholder="new comment" class="form-control">
+            <button class="btn btn-default"
+                    ng-click="addComment(newcomment, check.checkResultIdentifier)">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+        </div>
+    </div>
+</div>

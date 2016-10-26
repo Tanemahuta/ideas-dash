@@ -2,10 +2,11 @@ package de.axelspringer.ideas.tools.dash.business.jenkins.executor;
 
 import de.axelspringer.ideas.tools.dash.business.check.Check;
 import de.axelspringer.ideas.tools.dash.business.check.CheckExecutor;
-import de.axelspringer.ideas.tools.dash.business.check.CheckResult;
+import de.axelspringer.ideas.tools.dash.business.check.checkresult.CheckResult;
 import de.axelspringer.ideas.tools.dash.business.jenkins.JenkinsCheck;
 import de.axelspringer.ideas.tools.dash.business.jenkins.JenkinsClient;
 import de.axelspringer.ideas.tools.dash.business.jenkins.JenkinsServerConfiguration;
+import de.axelspringer.ideas.tools.dash.business.jenkins.domain.BuildInfo;
 import de.axelspringer.ideas.tools.dash.business.jenkins.domain.JenkinsJobInfo;
 import de.axelspringer.ideas.tools.dash.presentation.State;
 import org.slf4j.Logger;
@@ -49,10 +50,19 @@ public class JenkinsCheckExecutor implements CheckExecutor<JenkinsCheck> {
                             .withTeams(check.getTeams()));
         }
 
+        final BuildInfo buildInfo = check.isFetchBuildInfo() ? buildInfo(check.getJobUrl(), serverConfiguration) : new BuildInfo();
+
         if (jobInfo.isPipeline()) {
-            return pipelineExecutor.executeCheck(jobInfo, check);
+            return pipelineExecutor.executeCheck(jobInfo, check, buildInfo);
         }
-        return jobExecutor.executeCheck(jobInfo, check);
+        return jobExecutor.executeCheck(jobInfo, check, buildInfo);
+    }
+
+    private BuildInfo buildInfo(String jobUrl, JenkinsServerConfiguration serverConfiguration) {
+        final BuildInfo buildInfo = jenkinsClient.query(
+                jobUrl + "/lastSuccessfulBuild/artifact/" + BuildInfo.JENKINS_BUILD_INFO_FILE_NAME, serverConfiguration,
+                BuildInfo.class);
+        return buildInfo != null ? buildInfo : new BuildInfo();
     }
 
     @Override

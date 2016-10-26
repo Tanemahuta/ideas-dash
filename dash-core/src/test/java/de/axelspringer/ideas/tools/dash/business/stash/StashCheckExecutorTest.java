@@ -1,7 +1,7 @@
 package de.axelspringer.ideas.tools.dash.business.stash;
 
 import de.axelspringer.ideas.tools.dash.TestTeam;
-import de.axelspringer.ideas.tools.dash.business.check.CheckResult;
+import de.axelspringer.ideas.tools.dash.business.check.checkresult.CheckResult;
 import de.axelspringer.ideas.tools.dash.business.failure.FailureGroup;
 import de.axelspringer.ideas.tools.dash.presentation.State;
 import org.junit.Before;
@@ -108,7 +108,7 @@ public class StashCheckExecutorTest {
 
 		final CheckResult checkResult1 = this.checkResult.get(0);
 		assertEquals("Merge Request repo1", checkResult1.getName());
-		assertEquals("[]", checkResult1.getInfo());
+		assertEquals("[], nulld", checkResult1.getInfo());
 		assertEquals("http://stash.rockt/projects/PCP/repos/repo1/pull-requests/1", checkResult1.getLink());
 		assertEquals(FailureGroup.INSTANCE, checkResult1.getGroup());
 		assertEquals(State.RED, checkResult1.getState());
@@ -116,7 +116,7 @@ public class StashCheckExecutorTest {
 
 		final CheckResult checkResult2 = this.checkResult.get(1);
 		assertEquals("Merge Request repo1", checkResult2.getName());
-		assertEquals("[]", checkResult2.getInfo());
+		assertEquals("[], nulld", checkResult2.getInfo());
 		assertEquals("http://stash.rockt/projects/PCP/repos/repo1/pull-requests/2", checkResult2.getLink());
 		assertEquals(FailureGroup.INSTANCE, checkResult2.getGroup());
 		assertEquals(State.RED, checkResult2.getState());
@@ -124,7 +124,7 @@ public class StashCheckExecutorTest {
 
 		final CheckResult checkResult3 = this.checkResult.get(2);
 		assertEquals("Merge Request repo2", checkResult3.getName());
-		assertEquals("[]", checkResult3.getInfo());
+		assertEquals("[], nulld", checkResult3.getInfo());
 		assertEquals("http://stash.rockt/projects/PCP/repos/repo2/pull-requests/3", checkResult3.getLink());
 		assertEquals(FailureGroup.INSTANCE, checkResult3.getGroup());
 		assertEquals(State.RED, checkResult3.getState());

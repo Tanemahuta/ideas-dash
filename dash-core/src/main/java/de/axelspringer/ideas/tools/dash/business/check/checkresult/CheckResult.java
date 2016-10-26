@@ -1,4 +1,4 @@
-package de.axelspringer.ideas.tools.dash.business.check;
+package de.axelspringer.ideas.tools.dash.business.check.checkresult;
 
 import de.axelspringer.ideas.tools.dash.business.customization.Group;
 import de.axelspringer.ideas.tools.dash.business.customization.Team;
@@ -20,6 +20,11 @@ public class CheckResult {
     private String name;
 
     private String info;
+
+    /**
+     * Will be displayed as the 'tooltip' in the UI
+     */
+    private String description;
 
     /**
      * Link for Detail info.
@@ -44,6 +49,13 @@ public class CheckResult {
     private Group group;
 
     private final List<String> teams = new ArrayList<>();
+
+    /**
+     * This field serves as an identifier for a check execution. The value of this field should be identical no matter
+     * how often the check is executed if the item under check has not changed (for instance if the same jenkins job is checked several times.
+     * It serves as an identifier for information that is mapped to a check result (eg comments).
+     */
+    private String checkResultIdentifier;
 
     public CheckResult(State state, String name, String info, int testCount, int failCount, Group group) {
         this.state = state;
@@ -81,9 +93,24 @@ public class CheckResult {
         return this;
     }
 
-    public CheckResult withIconSrc(String link){
+    public CheckResult withIconSrc(String link) {
         this.iconSrc = link;
         return this;
+    }
+
+    /**
+     * see {@link #checkResultIdentifier}
+     */
+    public CheckResult withCheckResultIdentifier(String checkResultIdentifier) {
+        this.checkResultIdentifier = checkResultIdentifier;
+        return this;
+    }
+
+    /**
+     * see {@link #checkResultIdentifier}
+     */
+    public String getCheckResultIdentifier() {
+        return checkResultIdentifier;
     }
 
     public State getState() {
@@ -136,6 +163,15 @@ public class CheckResult {
 
     public CheckResult withOrder(Integer order) {
         this.order = order;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public CheckResult withDescription(String description) {
+        this.description = description;
         return this;
     }
 }

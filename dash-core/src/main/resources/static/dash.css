@@ -1,3 +1,7 @@
+.dash-main-container {
+    min-height: 100vh;
+}
+
 .check-group {
     position: relative;
     display: table;
@@ -31,6 +35,7 @@
     margin-left: .5em;
     padding: .5em;
     text-align: center;
+    vertical-align: top;
 }
 
 .panel-content-left {
@@ -67,4 +72,33 @@
 
 .team-label {
     margin-right: 15px;
+}
+
+.check-metainfo {
+    clear: both;
+    padding-top: 5px;
+}
+
+.comments-form {
+    display: none;
+}
+
+.check:hover .comments-form {
+    display: block;
+}
+
+.description {
+    display: none;
+}
+
+.check:hover .description {
+    display: block;
+}
+
+.check .comment {
+    padding: 0;
+    font-size: inherit;
+    margin: 5px 0;
+    text-align: left;
+    border-left: 5px solid #ababab;
 }
